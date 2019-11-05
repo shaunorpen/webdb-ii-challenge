@@ -1,10 +1,21 @@
 const express = require("express");
-const dealer = require("../data/db-config");
-
 const router = express.Router();
+const dealer = require("./helpers");
+
+router.get("/:id", (req, res) => {
+  dealer
+    .getCar(req.params.id)
+    .then(data => {
+      res.status(200).json(data[0]);
+    })
+    .catch(error => {
+      res.status(500).json(error.message);
+    });
+});
 
 router.get("/", (req, res) => {
-  dealer("cars")
+  dealer
+    .getAllCars()
     .then(data => {
       res.status(200).json(data);
     })
@@ -14,8 +25,8 @@ router.get("/", (req, res) => {
 });
 
 router.post("/", (req, res) => {
-  dealer("cars")
-    .insert(req.body)
+  dealer
+    .addCar(req.body)
     .then(data => {
       res.status(201).json(data);
     })
@@ -25,11 +36,25 @@ router.post("/", (req, res) => {
 });
 
 router.put("/:id", (req, res) => {
-  // implement
+  dealer
+    .updateCar(req.body)
+    .then(data => {
+      res.status(200).json(data);
+    })
+    .catch(error => {
+      res.status(500).json(error.message);
+    });
 });
 
 router.delete("/:id", (req, res) => {
-  // implement
+  dealer
+    .deleteCar(req.params.id)
+    .then(data => {
+      res.status(200).json(data);
+    })
+    .catch(error => {
+      res.status(500).json(error.message);
+    });
 });
 
 module.exports = router;
